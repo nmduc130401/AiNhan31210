@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Tặng bé Bông của chú</title>
+  <style>
+    body {
+      margin:0;
+      overflow:hidden;
+      background:black;
+      height:100vh;
+    }
+
+    /* Sao */
+    .star {
+      position:absolute;
+      width:2px; height:2px;
+      background:white;
+      border-radius:50%;
+      opacity:0.8;
+      animation: twinkle 2s infinite;
+    }
+    @keyframes twinkle {
+      0%,100%{opacity:0.2;}
+      50%{opacity:1;}
+    }
+
+    /* Chữ */
+    .word {
+      position:absolute;
+      color:#ff69b4;
+      font-weight:bold;
+      text-shadow:0 0 10px #ff99cc;
+      animation: float 10s linear infinite;
+    }
+    @keyframes float {
+      0%{transform:translateY(100vh) scale(0.5);opacity:0;}
+      20%{opacity:1;}
+      100%{transform:translateY(-20vh) scale(1.2);opacity:0;}
+    }
+
+    /* Tim */
+    .heart {
+      position:absolute;
+      color:#ff1493;
+      font-size:20px;
+      animation: fall linear forwards;
+    }
+    @keyframes fall {
+      0%{transform:translateY(-10vh) rotate(0);}
+      100%{transform:translateY(110vh) rotate(360deg);}
+    }
+
+    /* Ảnh slideshow */
+    .photo {
+      max-width: 80%;
+      max-height: 80%;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.8);
+      opacity: 0;
+      position:absolute;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%) scale(0.9);
+      animation: fadeIn 2s forwards;
+      object-fit: contain;
+      image-orientation: from-image;
+      z-index: 500;
+    }
+    .fadeOut {
+      animation: fadeOut 2s forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity:0; transform:translate(-50%,-50%) scale(0.9); }
+      to   { opacity:1; transform:translate(-50%,-50%) scale(1); }
+    }
+    @keyframes fadeOut {
+      from { opacity:1; transform:translate(-50%,-50%) scale(1); }
+      to   { opacity:0; transform:translate(-50%,-50%) scale(0.9); }
+    }
+
+    /* Nút bấm */
+    #play-btn {
+      position:fixed; top:20px; left:20px;
+      padding:10px 20px; font-size:16px;
+      border:none; border-radius:10px;
+      background:pink; color:white; font-weight:bold;
+      box-shadow:0 0 10px #ff66cc;
+      z-index:1000;
+    }
+  </style>
+</head>
+<body>
+  <button id="play-btn">Bấm vô đây nè con iu 🎵</button>
+  <audio id="bg-music" src="Tiamo.mp3" loop></audio>
+
+  <script>
+    // Hiệu ứng chữ
+    const texts = ["Chú iu con 💗","I LOVE YOU","Thương em nhiều 💝","Mãi bên nhau nhé con","Tiamo 💕", "Srolang 💕", "Mau ăn chóng lớn nha con"];
+    function createWord(){
+      const w=document.createElement("div");
+      w.className="word";
+      w.innerText=texts[Math.random()*texts.length|0];
+      w.style.left=Math.random()*innerWidth+"px";
+      w.style.fontSize=(16+Math.random()*24)+"px";
+      w.style.animationDuration=(6+Math.random()*6)+"s";
+      document.body.appendChild(w);
+      setTimeout(()=>w.remove(),12000);
+    }
+
+    // Tim rơi
+    function createHeart(){
+      const h=document.createElement("div");
+      h.className="heart";
+      h.innerText="💖";
+      h.style.left=Math.random()*innerWidth+"px";
+      h.style.fontSize=(14+Math.random()*30)+"px";
+      h.style.animationDuration=(4+Math.random()*6)+"s";
+      document.body.appendChild(h);
+      setTimeout(()=>h.remove(),10000);
+    }
+
+    // Sao nền
+    function createStars(){
+      for(let i=0;i<100;i++){
+        const s=document.createElement("div");
+        s.className="star";
+        s.style.left=Math.random()*innerWidth+"px";
+        s.style.top=Math.random()*innerHeight+"px";
+        s.style.animationDuration=(1+Math.random()*3)+"s";
+        document.body.appendChild(s);
+      }
+    }
+
+    // Slideshow ảnh
+    const photos = [
+      "anh1.jpg","anh2.jpg","anh3.jpg",
+      "anh4.jpg","anh5.jpg",
+      "anh6.jpg", "anh7.jpg","anh8.jpg","anh9.jpg", "anh10.jpg","anh11.jpg",  
+    ];
+    let photoIndex = 0;
+
+    function showNextPhoto() {
+      const img = document.createElement("img");
+      img.src = photos[photoIndex];
+      img.className = "photo";
+      document.body.appendChild(img);
+
+      setTimeout(() => { img.classList.add("fadeOut"); }, 4000);
+      setTimeout(() => {
+        img.remove();
+        photoIndex = (photoIndex + 1) % photos.length;
+        showNextPhoto();
+      }, 5000);
+    }
+
+    // Nút bấm
+    const btn = document.getElementById("play-btn");
+    const music = document.getElementById("bg-music");
+
+    btn.addEventListener("click", () => {
+      music.play();
+      btn.style.display = "none";
+      createStars();
+      setInterval(createWord, 800);
+      setInterval(createHeart, 1000);
+      showNextPhoto();
+    });
+  </script>
+</body>
+</html>
