@@ -11,6 +11,30 @@
       height:100vh;
     }
 
+    /* Sao rơi */
+.falling-star {
+  position: absolute;
+  width: 3px;
+  height: 30px;
+  background: linear-gradient(to bottom, white, rgba(255,255,255,0));
+  border-radius: 50%;
+  opacity: 0.9;
+  animation: fallStar 2s linear forwards;
+  z-index: 200;
+}
+
+@keyframes fallStar {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(110vh);
+    opacity: 0;
+  }
+}
+
+    
     /* Sao */
     .star {
       position:absolute;
@@ -168,6 +192,34 @@
       setInterval(createHeart, 300);
       showNextPhoto();
     });
+
+    // Tạo sao rơi
+function createFallingStar() {
+  const star = document.createElement("div");
+  star.className = "falling-star";
+
+  // Xuất hiện ngẫu nhiên trên bầu trời
+  star.style.left = Math.random() * innerWidth + "px";
+  star.style.top = "-40px"; // bắt đầu từ trên màn hình
+
+  // Ngẫu nhiên độ dài và tốc độ
+  star.style.height = 20 + Math.random() * 40 + "px";
+  star.style.animationDuration = (1.5 + Math.random() * 1.5) + "s";
+
+  document.body.appendChild(star);
+
+  setTimeout(() => star.remove(), 3000);
+}
+
+// Liên tục tạo sao rơi
+setInterval(() => {
+  // mỗi lần rơi 2–3 ngôi sao
+  const count = 2 + Math.floor(Math.random() * 2);
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => createFallingStar(), i * 300);
+  }
+}, 1500);
+
   </script>
 </body>
 </html>
